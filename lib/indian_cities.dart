@@ -1,4 +1,3 @@
-
 const List<String> indianCities = [
   "Mumbai",
   "Delhi",
@@ -275,5 +274,5 @@ const List<String> indianCities = [
   "Neyveli",
   "Kumbakonam",
   "Tiruvannamalai",
-  "Tezpur"
+  "Tezpur",
 ];

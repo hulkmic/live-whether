@@ -23,10 +23,9 @@ class MyApp extends StatelessWidget {
       title: 'Weather App',
       theme: ThemeData.dark().copyWith(
         primaryColor: Colors.blue,
-        textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme).apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
+        textTheme: GoogleFonts.latoTextTheme(
+          Theme.of(context).textTheme,
+        ).apply(bodyColor: Colors.white, displayColor: Colors.white),
       ),
       home: const WeatherPage(),
     );
@@ -51,10 +50,7 @@ class _WeatherPageState extends State<WeatherPage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue[900]!,
-              Colors.blue[700]!,
-            ],
+            colors: [Colors.blue[900]!, Colors.blue[700]!],
           ),
         ),
         child: SafeArea(
@@ -92,27 +88,32 @@ class _WeatherPageState extends State<WeatherPage> {
                   ),
                   suggestionsCallback: (pattern) {
                     return indianCities
-                        .where((city) =>
-                            city.toLowerCase().startsWith(pattern.toLowerCase()))
+                        .where(
+                          (city) => city.toLowerCase().startsWith(
+                            pattern.toLowerCase(),
+                          ),
+                        )
                         .toList();
                   },
                   itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      title: Text(suggestion),
-                    );
+                    return ListTile(title: Text(suggestion));
                   },
                   onSuggestionSelected: (suggestion) {
                     _cityController.text = suggestion;
-                    Provider.of<WeatherProvider>(context, listen: false)
-                        .fetchWeather(suggestion);
+                    Provider.of<WeatherProvider>(
+                      context,
+                      listen: false,
+                    ).fetchWeather(suggestion);
                   },
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
                     if (_cityController.text.isNotEmpty) {
-                      Provider.of<WeatherProvider>(context, listen: false)
-                          .fetchWeather(_cityController.text);
+                      Provider.of<WeatherProvider>(
+                        context,
+                        listen: false,
+                      ).fetchWeather(_cityController.text);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -141,15 +142,22 @@ class _WeatherPageState extends State<WeatherPage> {
                         return Center(
                           child: Text(
                             provider.errorMessage!,
-                            style: const TextStyle(color: Colors.red, fontSize: 18.0),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 18.0,
+                            ),
                           ),
                         );
                       } else if (provider.weatherData != null) {
-                        final weather = provider.weatherData!;
+                        final weather = provider.weatherData!['weather'][0];
+                        final main = provider.weatherData!['main'];
+                        final name = provider.weatherData!['name'];
+                        final country = provider.weatherData!['sys']['country'];
+
                         return Column(
                           children: [
                             Text(
-                              '${weather['name']}, ${weather['sys']['country']}',
+                              '$name, $country',
                               style: GoogleFonts.lato(
                                 fontSize: 32.0,
                                 fontWeight: FontWeight.bold,
@@ -157,7 +165,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             ),
                             const SizedBox(height: 16.0),
                             Text(
-                              '${(weather['main']['temp']).round()}°C',
+                              '${main['temp'].round()}°C',
                               style: GoogleFonts.oswald(
                                 fontSize: 80.0,
                                 fontWeight: FontWeight.bold,
@@ -165,7 +173,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             ),
                             const SizedBox(height: 16.0),
                             Text(
-                              '${weather['weather'][0]['description']}',
+                              '${weather['description']}',
                               style: GoogleFonts.lato(
                                 fontSize: 24.0,
                                 fontStyle: FontStyle.italic,

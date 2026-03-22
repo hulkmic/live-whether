@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'weather_service.dart';
 
 class WeatherProvider with ChangeNotifier {
-  final WeatherService _weatherService = WeatherService(apiKey: '0aad221fb0c2151d720a448eb0433f1d');
+  final WeatherService _weatherService = WeatherService(
+    apiKey: '0aad221fb0c2151d720a448eb0433f1d',
+  );
   Map<String, dynamic>? _weatherData;
   bool _isLoading = false;
   String? _errorMessage;
